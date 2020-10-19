@@ -17,12 +17,13 @@ const MyStack = () => {
       <Stack.Navigator>
         <Stack.Screen
           name="Loading"
-          component={Loading}
+          component={Loading} 
+          options={{headerShown : false}}
           // options={{ title: 'Loading Smile' }}
         />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="SignUp" component={SignUp} options={{headerShown : false}}/>
+        <Stack.Screen name="Login" component={Login} options={{headerShown : false}}/>
+        <Stack.Screen name="Main" component={Main} options={{headerShown : false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
