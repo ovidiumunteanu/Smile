@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>856367629106-ev4cp4or3j6g6vb5j8aft6kias71n847.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.856367629106-ev4cp4or3j6g6vb5j8aft6kias71n847</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDxfci3wBpUO0cY0TWeMU8rTk5t3IIvbfE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>856367629106</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>smile-ios</string>
+	<key>PROJECT_ID</key>
+	<string>smile-rn</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smile-rn.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:856367629106:ios:fd433ef8752a6d26e04d2b</string>
+	<key>DATABASE_URL</key>
+	<string>https://smile-rn.firebaseio.com</string>
+</dict>
+</plist>
