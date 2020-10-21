@@ -1,46 +1,26 @@
-// Loading.js
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native';
-import auth from '@react-native-firebase/auth'
+import React from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const { width, height } = Dimensions.get("window");
-
-export default class Loading extends React.Component {
-
-  componentDidMount() {
-    const that = this;
-    setTimeout(() =>{
-      auth().onAuthStateChanged(user => {
-        this.props.navigation.navigate(user ? 'Main' : 'Login')
-      })
-    }, 4000)
-    
-  }
-
-  render() {
+const Loading = ({ backgroundColor = "rgba(0,0,0,0.5)", }) => {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ImageBackground style={style.container} source={require("../assets/images/Logo.png")}>
-            <View style={style.overlay}></View>
-        </ImageBackground>
-      </View>
-      
+        <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+        </View>
     );
-  }
-}
+};
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 2
+    },
+});
 
-  container : {
-      width : 300, 
-      height : 200,
-      resizeMode: "center"
-  },
-  overlay : {
-      width : width,
-      height : height,
-      position: "absolute",
-      backgroundColor: "transparent"
-  }
-
-})
+export default Loading;

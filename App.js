@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Platform, Image, Text, View } from 'react-native'
 
 // import the different screens
-import Loading from './src/Loading'
+import Splash from './src/Splash'
 import SignUp from './src/userAuth/SignUp'
 import Login from './src/userAuth/Login'
 import Main from './src/Main'
@@ -16,8 +16,8 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Loading"
-          component={Loading} 
+          name="Splash"
+          component={Splash} 
           options={{headerShown : false}}
           // options={{ title: 'Loading Smile' }}
         />

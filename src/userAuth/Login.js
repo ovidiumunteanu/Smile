@@ -1,60 +1,209 @@
-// Login.js
-import React from 'react'
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import auth from '@react-native-firebase/auth'
+import React, { Component } from 'react';
+import { View,Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView, Platform, Alert } from 'react-native';
+import Text from "../components/Text";
+import TextInput from "../components/TextInput";
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { isIphoneX } from 'react-native-iphone-x-helper';
+import auth from '@react-native-firebase/auth';
+import firestore from "@react-native-firebase/firestore";
+import Loading from "../Loading";
+import LinearGradient from "react-native-linear-gradient";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+const iphonex = isIphoneX();
+const { width, height } = Dimensions.get("screen");
 
-export default class Login extends React.Component {
-  state = { email: '', password: '', errorMessage: null }
-  handleLogin = () => {
-    const { email, password } = this.state
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate('Main'))
-      .catch(error => this.setState({ errorMessage: error.message }))
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Login</Text>
-        {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
-            {this.state.errorMessage}
-          </Text>}
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Email"
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <TextInput
-          secureTextEntry
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Password"
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <Button title="Login" onPress={this.handleLogin} />
-        <Button
-          title="Don't have an account? Sign Up"
-          onPress={() => this.props.navigation.navigate('SignUp')}
-        />
-      </View>
-    )
-  }
+class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            remember : false,
+            email : "",
+            password : "",
+            loading : false
+        };
+    }
+
+    _onPressRemember = () => {
+        this.setState({remember : !this.state.remember})
+    }
+
+    _onChangeEmail = (email) => {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) this.setState({email : email})
+        else this.setState({email : ""})
+    }
+
+    _onChangePassword = (password) => {
+        this.setState({password: password});
+    }
+
+    _onPressForgotPassword = () => {
+        this.props.navigation.navigate("ForgotPassword");
+    }
+
+    _onPressSignUp = () => {
+        this.props.navigation.navigate("SignUp");
+    }
+
+    _submit = () => {
+        if(this.state.email == ""){
+            alert("Please enter your Email!");
+            return;
+        }
+        if(this.state.password == ""){
+            alert("Please enter your password!");
+            return;
+        }
+        this.setState({ loading: true });
+        const { email, password } = this.state;
+        auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(async res => {
+            const { uid } = res.user;
+            /*
+            const userDoc = await firestore().collection("users").doc(uid).get();
+            const userData = userDoc.data();
+
+            if (userData === undefined) { 
+                const { email } = res.user;
+                const data = { 
+                    email : email, 
+                    uid : uid
+                }
+                registerSuccess(data); 
+                this.props.navigation.navigate("UploadPhoto");
+            }
+            else { loginSuccess(userData); }
+            */
+            this.setState({ loading: false });
+            this.props.navigation.navigate("Main");
+            
+        })
+        .catch(error => {
+            this.setState({ loading: false });
+            if (error.code == "auth/invalid-email") Alert.alert("Invaild email");
+            else if (error.code == "auth/user-disabled") Alert.alert("Your account was disabled");
+            else if (error.code == "auth/wrong-password") Alert.alert("Password is wrong");
+            else if (error.code == "auth/user-not-found") {
+                Alert.alert("You are not registered!");
+            }
+        else { /-*7/
+                console.warn(error);
+            }
+        })
+
+    }
+
+    render() {
+        return (
+            <ImageBackground style={styles.container} source={require("../../assets/images/background_login.jpg")}>
+                <SafeAreaView style={{flex : 1}}>
+                    <View style={{width:width, justifyContent: "center", alignItems: "center"}}>
+                        <View>
+                            <Image style={{width: 0.8*width, height: 0.25*height, resizeMode: "center"}} source={require("../../assets/images/Logo.png")}/>
+                        </View>
+                        <TextInput  placeholder="Email" email onChangeText={this._onChangeEmail} disableAutoCapitalize/>
+                        <TextInput placeholder="Password" password onChangeText={this._onChangePassword}/>
+                        <TouchableOpacity style={styles.remember} onPress={this._onPressRemember} activeOpacity={1}>
+                            <View style={{...styles.rememberIcon, backgroundColor:this.state.remember?"white":"rgba(254,254,254,.25)"}}></View>
+                            <Text style={{fontSize : 16, fontFamily:"DMSans-Bold"}}>Remember this account?</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.submit} onPress={this._submit} activeOpacity={1}>
+                            <Text style={{color : this.state.password&&this.state.email?"pink":"white", fontSize : 20}}>LOGIN</Text>
+                        </TouchableOpacity>
+                        <View style={{marginBottom: 10}}>
+                            <Icon.Button
+                                name="facebook"
+                                backgroundColor="#3b5998"
+                                borderRadius = {30}
+                                onPress={this.loginWithFacebook}
+                                style={styles.social}
+                            >
+                                <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>
+                                    Login with Facebook
+                                </Text>
+                            </Icon.Button>
+                        </View>
+
+                        <Icon.Button
+                            name="google"
+                            backgroundColor="#e34958"
+                            borderRadius = {30}
+                            onPress={this.loginWithGoogle}
+                            style={styles.social}
+                        >
+                            <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>
+                                Login with Google
+                            </Text>
+                        </Icon.Button>
+
+                    </View>
+                    <View style={styles.bottom}>
+                        <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressForgotPassword}>
+                            <MCIcon name="key" size={20} color={"white"}/>
+                            <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10}}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                        <View style={{marginVertical : 10, width : 350, height : 3, backgroundColor :"rgba(255,255,255,0.3)"}}></View>
+                        <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressSignUp}>
+                            <MCIcon name="account-plus-outline" size={22} color={"white"}/>
+                            <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10}}>Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {this.state.loading && <Loading /> }
+                </SafeAreaView>
+            </ImageBackground>
+        );
+    }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textInput: {
-    height: 40,
-    width: '90%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 8
-  }
-})
+
+const styles=StyleSheet.create({
+    container : {
+        width : "100%", 
+        height : "100%",
+        resizeMode: "center"
+    },
+    remember : {
+        width:width - 70, 
+        marginTop:10, 
+        flexDirection:"row", 
+        alignItems:"center"
+    },
+    rememberIcon : {
+        width : 20, 
+        height:20, 
+        borderRadius : 15, 
+        backgroundColor:"rgba(254,254,254,.25)", 
+        marginRight : 10
+    },
+    social : {
+        width :wp("90%"), 
+        height :wp("13%"),       
+        justifyContent:"center", 
+        alignItems :"center"
+    },
+    
+    submit : {
+        width :wp("90%"), 
+        height :wp("13%"), 
+        backgroundColor :"#3b594099", 
+        marginTop : 25,
+        marginBottom: 25,
+        borderRadius :30, 
+        justifyContent:"center", 
+        alignItems :"center"
+    },
+
+    bottom : {
+        // position: "absolute",
+        // bottom : iphonex?200:Platform.OS=="ios"?100:100,
+        marginTop : 40,
+        justifyContent:"center",
+        width : width,
+        height : 50,
+        alignItems:"center"
+    }
+
+});
+
+
+export default Login;
