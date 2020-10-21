@@ -6,12 +6,27 @@ import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-community/google-signin';
+// import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import firestore from "@react-native-firebase/firestore";
 import Loading from "../Loading";
 import LinearGradient from "react-native-linear-gradient";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const iphonex = isIphoneX();
 const { width, height } = Dimensions.get("screen");
+
+
+
+async function onGoogleButtonPress() {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    // create a new firebase credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
+    // login with credential
+    const firebaseUserCredential = await auth().signInWithCredential(googleCredential);
+    
+    return firebaseUserCredential;
+}
 
 class Login extends Component {
     constructor(props) {
@@ -22,6 +37,16 @@ class Login extends Component {
             password : "",
             loading : false
         };
+    }
+
+    componentDidMount() {
+        GoogleSignin.configure({
+            webClientId: '856367629106-0la46bs0u0ls3bt6t1b73kt0orfp7fc6.apps.googleusercontent.com',
+            loginHint: 'developersmile01@gmail.com',
+            offlineAccess: true, 
+            hostedDomain: '', 
+            forceConsentPrompt: true,
+          });        
     }
 
     _onPressRemember = () => {
@@ -93,6 +118,24 @@ class Login extends Component {
         })
 
     }
+    _loginWithFacebook = () => {
+        onGoogleButtonPress().then(() => {
+                console.log('Signed in with Google!');
+                this.setState({ loading: false });
+                this.props.navigation.navigate("Main");
+            }
+        )
+    }
+    
+
+    _loginWithGoogle = () => {
+        onGoogleButtonPress().then(() => {
+                this.props.navigation.navigate("Main");
+                console.log('Signed in with Google!');
+                
+            }
+        )
+    }
 
     render() {
         return (
@@ -116,7 +159,7 @@ class Login extends Component {
                                 name="facebook"
                                 backgroundColor="#3b5998"
                                 borderRadius = {30}
-                                onPress={this.loginWithFacebook}
+                                onPress={this._loginWithFacebook}
                                 style={styles.social}
                             >
                                 <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>
@@ -129,7 +172,7 @@ class Login extends Component {
                             name="google"
                             backgroundColor="#e34958"
                             borderRadius = {30}
-                            onPress={this.loginWithGoogle}
+                            onPress={this._loginWithGoogle}
                             style={styles.social}
                         >
                             <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>

@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:856367629106:android:4aac6a1eaccb9f5fe04d2b",
+        "mobilesdk_app_id": "1:856367629106:android:856a7e242d09069ae04d2b",
         "android_client_info": {
           "package_name": "com.smile"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "856367629106-c0mnbcg090caouvi88o9hp207hkflt5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smile",
+            "certificate_hash": "53788763d82986083996b581b981d3cc8a4cdbf8"
+          }
+        },
         {
           "client_id": "856367629106-0la46bs0u0ls3bt6t1b73kt0orfp7fc6.apps.googleusercontent.com",
           "client_type": 3
