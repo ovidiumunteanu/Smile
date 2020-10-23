@@ -139,11 +139,11 @@ class Login extends Component {
 
     render() {
         return (
-            <ImageBackground style={styles.container} source={require("../../assets/images/background_login.jpg")}>
+            <ImageBackground style={styles.container} source={require("../../../assets/images/background_login.jpg")}>
                 <SafeAreaView style={{flex : 1}}>
                     <View style={{width:width, justifyContent: "center", alignItems: "center"}}>
                         <View>
-                            <Image style={{width: 0.8*width, height: 0.25*height, resizeMode: "center"}} source={require("../../assets/images/Logo.png")}/>
+                            <Image style={{width: 0.8*width, height: 0.25*height, resizeMode: "center"}} source={require("../../../assets/images/Logo.png")}/>
                         </View>
                         <TextInput  placeholder="Email" email onChangeText={this._onChangeEmail} disableAutoCapitalize/>
                         <TextInput placeholder="Password" password onChangeText={this._onChangePassword}/>
