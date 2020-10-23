@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View,Image, Dimensions, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView, Platform, Alert } from 'react-native';
-import Text from "../components/Text";
-import TextInput from "../components/TextInput";
+import Text from "../../components/Text";
+import TextInput from "../../components/TextInput";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -9,7 +9,7 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
 // import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import firestore from "@react-native-firebase/firestore";
-import Loading from "../Loading";
+import Loading from "../../Loading";
 import LinearGradient from "react-native-linear-gradient";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const iphonex = isIphoneX();

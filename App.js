@@ -5,9 +5,9 @@ import { StyleSheet, Platform, Image, Text, View } from 'react-native'
 
 // import the different screens
 import Splash from './src/Splash'
-import SignUp from './src/userAuth/SignUp'
-import Login from './src/userAuth/Login'
-import Main from './src/Main'
+import SignUp from './src/screens/authScreens/SignUp'
+import Login from './src/screens/authScreens/Login'
+import Main from './src/screens/main/Main'
 // create our app's navigation stack
 const Stack = createStackNavigator();
 
