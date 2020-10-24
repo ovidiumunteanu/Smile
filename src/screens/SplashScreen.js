@@ -11,7 +11,7 @@ export default class Splash extends React.Component {
     const that = this;
     setTimeout(() =>{
       auth().onAuthStateChanged(user => {
-        this.props.navigation.navigate(user ? 'Main' : 'Login')
+        this.props.navigation.navigate(user ? 'MainStack' : 'AuthStack')
       })
     }, 4000)
     
@@ -20,7 +20,7 @@ export default class Splash extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ImageBackground style={style.container} source={require("../assets/images/Logo.png")}>
+        <ImageBackground style={style.container} source={require("../../assets/images/Logo.png")}>
             <View style={style.overlay}></View>
         </ImageBackground>
       </View>

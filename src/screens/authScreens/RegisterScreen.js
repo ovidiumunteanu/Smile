@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import auth from '@react-native-firebase/auth'
 
-export default class SignUp extends React.Component {
+export default class SignupScreen extends React.Component {
   state = { email: '', password: '', errorMessage: null }
   handleSignUp = () => {
     auth()
@@ -37,7 +37,7 @@ render() {
         <Button title="Sign Up" onPress={this.handleSignUp} />
         <Button
           title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Login')}
+          onPress={() => this.props.navigation.navigate('LoginScreen')}
         />
       </View>
     )

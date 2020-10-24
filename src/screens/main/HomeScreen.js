@@ -17,7 +17,7 @@ export default class Main extends React.Component {
     .signOut()
     .then(() => {
         console.log('User signed out!');
-        this.props.navigation.navigate("Login");
+        this.props.navigation.navigate("AuthStack");
       })
     .catch(error => {
         

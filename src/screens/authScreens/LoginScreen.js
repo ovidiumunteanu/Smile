@@ -7,9 +7,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-community/google-signin';
-// import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import firestore from "@react-native-firebase/firestore";
-import Loading from "../../Loading";
+import { connect } from "react-redux";
+import Loading from "../Loading";
+import { registerSuccess, loginSuccess } from "../../actions/AuthActions";
 import LinearGradient from "react-native-linear-gradient";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const iphonex = isIphoneX();
@@ -28,7 +29,7 @@ async function onGoogleButtonPress() {
     return firebaseUserCredential;
 }
 
-class Login extends Component {
+class LoginScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -67,7 +68,7 @@ class Login extends Component {
     }
 
     _onPressSignUp = () => {
-        this.props.navigation.navigate("SignUp");
+        this.props.navigation.navigate("RegisterScreen");
     }
 
     _submit = () => {
@@ -81,11 +82,12 @@ class Login extends Component {
         }
         this.setState({ loading: true });
         const { email, password } = this.state;
+        const { registerSuccess, loginSuccess } = this.props;
         auth()
         .signInWithEmailAndPassword(email, password)
         .then(async res => {
             const { uid } = res.user;
-            /*
+            
             const userDoc = await firestore().collection("users").doc(uid).get();
             const userData = userDoc.data();
 
@@ -96,12 +98,11 @@ class Login extends Component {
                     uid : uid
                 }
                 registerSuccess(data); 
-                this.props.navigation.navigate("UploadPhoto");
+                this.props.navigation.navigate("MainStack");
             }
             else { loginSuccess(userData); }
-            */
+            
             this.setState({ loading: false });
-            this.props.navigation.navigate("Main");
             
         })
         .catch(error => {
@@ -122,7 +123,7 @@ class Login extends Component {
         onGoogleButtonPress().then(() => {
                 console.log('Signed in with Google!');
                 this.setState({ loading: false });
-                this.props.navigation.navigate("Main");
+                this.props.navigation.navigate("MainStack");
             }
         )
     }
@@ -130,7 +131,7 @@ class Login extends Component {
 
     _loginWithGoogle = () => {
         onGoogleButtonPress().then(() => {
-                this.props.navigation.navigate("Main");
+                this.props.navigation.navigate("MainStack");
                 console.log('Signed in with Google!');
                 
             }
@@ -248,5 +249,14 @@ const styles=StyleSheet.create({
 
 });
 
+const mapStateToProps = state => {
+    return {
+        user : state.UserReducer
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    registerSuccess : data => dispatch(registerSuccess(data)),
+    loginSuccess : data => dispatch(loginSuccess(data))
+})
 
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
