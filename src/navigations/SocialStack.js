@@ -1,4 +1,6 @@
 import React from 'react';
+import {TouchableOpacity, Text, View, StyleSheet, Dimensions} from 'react-native';
+import FastImage from "react-native-fast-image";
 import { createStackNavigator } from "@react-navigation/stack";
 import { HeaderBackButton } from '@react-navigation/stack';
 import SocialHomeScreen from "../screens/main/social/SocialHomeScreen";
@@ -6,24 +8,14 @@ import SocialHomeScreen from "../screens/main/social/SocialHomeScreen";
 // import UploadPhoto from "../screens/auth/UploadPhoto";
 // import SelectGender from "../screens/auth/SelectGender";
 // import UpdateProfile from "../screens/auth/UpdateProfile";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+const { width, height } = Dimensions.get("screen");
 
 const Stack = createStackNavigator();
 
 function SocialStack({ navigation }) {
     return (
-        <Stack.Navigator screenOptions={{
-            gestureEnabled :false,
-            headerStyle: {
-                backgroundColor: "black",
-            },
-            headerTintColor: "white",
-            headerTitleStyle: {
-                fontFamily: "DMSans-Medium",
-                fontSize: 20, 
-            },
-            headerTitleAlign : "center", 
-            headerLeft: (props) => <HeaderBackButton tintColor="white" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.pop()} />
-        }}>
+        <Stack.Navigator>
             <Stack.Screen name="SocialHomeScreen" component={SocialHomeScreen} options={{
                 headerShown: false
                 // headerLeft: (props) => <HeaderBackButton tintColor="white" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.navigate("Start")} />
@@ -75,5 +67,27 @@ function SocialStack({ navigation }) {
         </Stack.Navigator> 
     )
 }
+const styles = StyleSheet.create({    
+    userPhoto: {
+        width: 35,
+        height: 35,
+        borderRadius: 20,
+        borderColor: "grey",
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    shopping: {
+        width: 30,
+        height: 30,
+        borderRadius: 0,
+        marginLeft: 5,
+        marginRight: 5
+    },
+    logo: {
+        width :wp("40%"), 
+        height: wp("15%"),
+        marginBottom: 15
+    }
+});
 
 export default SocialStack;

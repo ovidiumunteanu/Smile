@@ -1,27 +1,34 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator, DrawerContent, DrawerItemList } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/main/delivery/HomeScreen";
 import DeliveryStack from "./DeliveryStack";
 import SupplierStack from "./SupplierStack";
 import SocialStack from "./SocialStack";
 import KingdomStack from "./KingdomStack";
+import DrawerContainer from "../components/DrawerContainer";
 // import NotificationStack from "./NotificationStack";
 // import ChatStack from "./ChatStack";
 // import ProfileStack from "./ProfileStack";
 import { useIsFocused } from "@react-navigation/native";
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView} from "react-native";
 import FastImage from "react-native-fast-image";
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+const { width, height } = Dimensions.get("screen");
 
 const TabStack = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-function MainStack({ navigation }) {
+function BottomTabNav({ navigation }) {
     return (
         <TabStack.Navigator
             lazy={false}
             tabBarOptions={{
                 style: {
-                    // backgroundColor: "#1F1F21",
+                    backgroundColor: "transparent",
                     minHeight: isIphoneX()?75 : 55,
                     paddingTop : 0,
                     marginBottom: 0
@@ -115,49 +122,151 @@ function MainStack({ navigation }) {
                     }
                 }}
             />
-            {/* <TabStack.Screen name="Chat" component={ChatStack}
-                options={{
-                    title: "Chat",
-                    tabBarIcon: () => {
-                        const isFocused = useIsFocused();
-                        if (isFocused) {
-                            return <Image source={require("../assets/images/chat-icon-active.png")} />
-                        } else {
-                            return <Image source={require("../assets/images/chat-icon-inactive.png")} />
-                        }
-                    }
-                }}
-            />
-            <TabStack.Screen name="Notification" component={NotificationStack}
-                options={{
-                    title: "Notifications",
-                    tabBarIcon: () => {
-                        const isFocused = useIsFocused();
-                        if (isFocused) {
-                            return <Image source={require("../assets/images/noti-icon-active.png")} />
-                        } else {
-                            return <Image source={require("../assets/images/noti-icon-inactive.png")} />
-                        }
-                    }
-                }}
-            />
-            <TabStack.Screen name="Profile" component={ProfileStack}
-                options={{
-                    title: "Profile",
-                    tabBarIcon: () => {
-                        const isFocused = useIsFocused();
-                        if (isFocused) {
-                            return <Image source={require("../assets/images/profile-icon-active.png")} />
-                        } else {
-                            return <Image source={require("../assets/images/profile-icon-inactive.png")} />
-                        }
-                    }
-                }}
-            /> */}
-
         </TabStack.Navigator>
     )
 }
+
+function WrapperStack({ navigation }) {
+    return (
+        <Stack.Navigator screenOptions={{
+            gestureEnabled :false,
+            headerStyle: {
+                backgroundColor: "transparent",
+                borderBottomWidth: 3,
+                height: wp("25%"),
+                borderBottomColor: '#00000020'
+
+            },
+            headerTintColor: "black",
+            headerTitleStyle: {
+                fontFamily: "DMSans-Medium",
+                fontSize: 20, 
+            },
+            headerTitleAlign : "center", 
+            // headerLeft: (props) => <HeaderBackButton tintColor="black" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.pop()} />
+            headerLeft: () => {
+                return (
+                    <View style={{flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'center'}}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.openDrawer();
+                            }}
+                        >
+                            <FastImage
+                                style={styles.userPhoto}
+                                resizeMode={FastImage.resizeMode.cover}
+                                source={require("../../assets/icons/ic_menu.png")}
+                                />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                //navigation.openDrawer();
+                            }}
+                        >
+                            <FastImage
+                                style={styles.userPhoto}
+                                resizeMode={FastImage.resizeMode.cover}
+                                source={require("../../assets/icons/ic_notification.png")}
+                                />
+                        </TouchableOpacity>
+                    </View>
+                    
+                );
+            },
+            headerRight: () => {
+                return (
+                    <View style={{flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'center'}}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                // navigation.openDrawer();
+                            }}
+                        >
+                            <FastImage
+                                style={styles.shopping}
+                                resizeMode={FastImage.resizeMode.stretch}
+                                source={require("../../assets/icons/ic_shopping.png")}
+                                />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                //navigation.openDrawer();
+                            }}
+                        >
+                            <FastImage
+                                style={styles.userPhoto}
+                                resizeMode={FastImage.resizeMode.cover}
+                                source={require("../../assets/icons/ic_user.png")}
+                                />
+                        </TouchableOpacity>
+                    </View>
+                );
+            },
+            headerTitle : () => (
+                <TouchableOpacity 
+                    style={{paddingLeft: 20}}
+                    onPress={() => {
+                        navigation.navigate('HomeScreen');
+                    }}
+                >
+                    <FastImage
+                        style={styles.logo}
+                        resizeMode={FastImage.resizeMode.stretch}
+                        source={require("../../assets/images/Logo.png")}
+                        />
+                </TouchableOpacity>
+                
+            )
+        }}>
+            <Stack.Screen name="TabStack" component={BottomTabNav} options={{
+                headerShown: true
+                // headerLeft: (props) => <HeaderBackButton tintColor="white" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.navigate("Start")} />
+            }}/>
+        </Stack.Navigator> 
+    )
+}
+
+const MainStack = () => {
+//     const { user, setUser } = useContext(AppContext);
+    return (
+      <Drawer.Navigator
+        drawerContent={(props) => {
+          return (
+            // <SafeAreaView style={{ flex: 1 }}>
+            //   <View
+            //     style={{
+            //       height: 100,
+            //       alignItems: "center",
+            //       justifyContent: "center",
+            //     }}
+            //   >
+            //     <FastImage
+            //         style={styles.logo}
+            //         resizeMode={FastImage.resizeMode.stretch}
+            //         source={require("../../assets/images/Logo.png")}                  
+            //     />
+            //   </View>
+            //   <DrawerItemList {...props} />
+            // </SafeAreaView>
+            <DrawerContainer />
+          );
+        }}
+      >
+        {<Drawer.Screen name="Home" component={WrapperStack} />}
+      </Drawer.Navigator>
+    );
+};
+
+// const DrawerStack = DrawerNavigator(
+// {
+//     Tab: TabNavigator
+// },
+// {
+//     drawerPosition: "left",
+//     initialRouteName: "Tab",
+//     drawerWidth: 200,
+//     contentComponent: DrawerContainer
+// }
+// );
 
 const styles = StyleSheet.create({
 
@@ -179,6 +288,26 @@ const styles = StyleSheet.create({
         width: 30, 
         height: 30, 
         resizeMode: 'stretch'
+    },
+    userPhoto: {
+        width: 35,
+        height: 35,
+        borderRadius: 20,
+        borderColor: "grey",
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    shopping: {
+        width: 30,
+        height: 30,
+        borderRadius: 0,
+        marginLeft: 5,
+        marginRight: 5
+    },
+    logo: {
+        width :wp("40%"), 
+        height: wp("15%"),
+        marginBottom: 15
     }
   
   })
