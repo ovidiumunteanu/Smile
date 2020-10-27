@@ -142,7 +142,7 @@ class RegisterScreen extends Component {
         const confirmed = this.state.fullname != "" && this.state.password != "" && this.state.email != "" && this.state.phonenumber != "" && this.state.toc;
         return (
 
-            <LinearGradient colors={["#DA1DA2", "#6D0F51"]} style={styles.bg} source={require("../../../assets/images/background_login.jpg")}>
+            <LinearGradient colors={["#EA3DE2", "#AD3F71"]} style={styles.bg} source={require("../../../assets/images/background_login.jpg")}>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     style={{ flex: 1 }}
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     submit : {
         width :wp("90%"), 
         height :wp("13%"), 
-        backgroundColor :"#3b594099", 
+        backgroundColor :"#3b59d099", 
         marginTop : 25,
         marginBottom: 25,
         borderRadius :30, 

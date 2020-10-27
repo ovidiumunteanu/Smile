@@ -16,19 +16,6 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const iphonex = isIphoneX();
 const { width, height } = Dimensions.get("screen");
 
-
-
-async function onGoogleButtonPress() {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    // create a new firebase credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
-    // login with credential
-    const firebaseUserCredential = await auth().signInWithCredential(googleCredential);
-    
-    return firebaseUserCredential;
-}
-
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
@@ -120,22 +107,56 @@ class LoginScreen extends Component {
 
     }
     _loginWithFacebook = () => {
-        onGoogleButtonPress().then(() => {
-                console.log('Signed in with Google!');
-                this.setState({ loading: false });
-                this.props.navigation.navigate("MainStack");
-            }
-        )
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        // create a new firebase credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
+        // login with credential
+        auth().signInWithCredential(googleCredential).then(async res => {
+            
+            const { additionalUserInfo, user } = res;
+            console.log(user.uid);
+            const { registerSuccess, loginSuccess } = this.props;
+            const userDoc = await firestore().collection("users").doc(user.uid).get();
+            const userData = userDoc.data();
+            if(userData === undefined ){ 
+                const data = { email : user.email, uid : user.uid }
+                registerSuccess(data);
+                const result = await firestore().collection('users').doc(user.uid).set(user);
+                //this.props.navigation.navigate("UploadPhoto");
+
+            }else{ loginSuccess(userData); }
+        }).catch(e => {
+            alert("Sorry, Something went wrong, please use another start method");
+            console.warn(e);
+        });
     }
     
 
-    _loginWithGoogle = () => {
-        onGoogleButtonPress().then(() => {
-                this.props.navigation.navigate("MainStack");
-                console.log('Signed in with Google!');
-                
-            }
-        )
+    _loginWithGoogle = async () => {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        // create a new firebase credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
+        // login with credential
+        auth().signInWithCredential(googleCredential).then(async res => {
+            
+            const { additionalUserInfo, user } = res;
+            console.log(user.uid);
+            const { registerSuccess, loginSuccess } = this.props;
+            const userDoc = await firestore().collection("users").doc(user.uid).get();
+            const userData = userDoc.data();
+            if(userData === undefined ){ 
+                const data = { email : user.email, uid : user.uid }
+                registerSuccess(data);
+                const result = await firestore().collection('users').doc(user.uid).set(user);
+                //this.props.navigation.navigate("UploadPhoto");
+
+            }else{ loginSuccess(userData); }
+        }).catch(e => {
+            alert("Sorry, Something went wrong, please use another start method");
+            console.warn(e);
+        });
     }
 
     render() {
