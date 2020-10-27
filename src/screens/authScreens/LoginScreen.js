@@ -106,7 +106,7 @@ class LoginScreen extends Component {
         })
 
     }
-    _loginWithFacebook = () => {
+    _loginWithFacebook = async () => {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
         // create a new firebase credential with the token
