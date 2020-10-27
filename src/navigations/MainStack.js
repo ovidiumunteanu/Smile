@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     logo: {
         width :wp("40%"), 
         height: wp("15%"),
-        marginBottom: isIphoneX()? 15 : 0
+        marginBottom: isIphoneX()? 15 : 10
     }
   
   })
