@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import TermAndConditions from "../../components/TermAndConditions";
 import auth from '@react-native-firebase/auth';
+import firestore from "@react-native-firebase/firestore";
 import Loading from "../Loading";
 import { registerSuccess } from "../../actions/AuthActions";
 import { connect } from "react-redux";
@@ -83,6 +84,10 @@ class RegisterScreen extends Component {
         this.setState({ toc: false, showToC: false });
     }
 
+    _onPressLogIn = () => {
+        this.props.navigation.navigate("LoginScreen");
+    }
+
     _onPressRegister = () => {
         if (this.state.fullname == "") {
             alert("Please enter your full name!");
@@ -137,13 +142,13 @@ class RegisterScreen extends Component {
         const confirmed = this.state.fullname != "" && this.state.password != "" && this.state.email != "" && this.state.phonenumber != "" && this.state.toc;
         return (
 
-            <LinearGradient colors={["#DA1DA2", "#6D0F51"]} style={style.bg} source={require("../../../assets/images/background_login.jpg")}>
+            <LinearGradient colors={["#DA1DA2", "#6D0F51"]} style={styles.bg} source={require("../../../assets/images/background_login.jpg")}>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     style={{ flex: 1 }}
                 >
                     <View style={{ width: width, backgroundColor: "rgba(254,254,254,.1)", borderTopRightRadius: 80, borderBottomLeftRadius: 60, justifyContent: "center", alignItems: "center" }}>
-                        <View style={style.logoContainer}>
+                        <View style={styles.logoContainer}>
                             <MCIcon name="account-plus-outline" size={42} color={"#EA455A"} />
                         </View>
                         <Text style={{ fontSize: iphonex ? 50 : 36, color: "white", marginTop: 0, marginBottom: 20, fontFamily: "DMSans-Medium"}}>Register</Text>
@@ -161,14 +166,20 @@ class RegisterScreen extends Component {
                                 flagStyle={{fontSize : 22}}
                             />
                         </View>
-                        <TouchableOpacity style={style.remember} onPress={this._onPressToc} activeOpacity={1}>
-                            <View style={{ ...style.rememberIcon, backgroundColor: this.state.remember ? "white" : "rgba(254,254,254,.25)" }}>
+                        <TouchableOpacity style={styles.remember} onPress={this._onPressToc} activeOpacity={1}>
+                            <View style={{ ...styles.rememberIcon, backgroundColor: this.state.remember ? "white" : "rgba(254,254,254,.25)" }}>
                                 {this.state.toc && <MCIcon name="check" color="#EA465B" size={20} />}
                             </View>
                             <Text style={{ fontSize: 16, fontFamily: "DMSans-Bold" }}>Agree to Terms & Contditions</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={style.submit} onPress={this._onPressRegister} activeOpacity={confirmed ? .5 : 1}>
-                            <MCIcon name="check" size={32} color={confirmed ? "#EA465B" : "#C9C9C9"} />
+                        <TouchableOpacity style={styles.submit} onPress={this._onPressRegister} activeOpacity={confirmed ? .5 : 1}>
+                            <Text style={{color : confirmed?"pink":"white", fontSize : 20}}>REGISTER</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.bottom}>                        
+                        <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressLogIn}>
+                            <MCIcon name="exit-to-app" size={22} color={"white"}/>
+                            <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10}}>Log In</Text>
                         </TouchableOpacity>
                     </View>
                     <TermAndConditions
@@ -184,7 +195,7 @@ class RegisterScreen extends Component {
     }
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     bg: {
         width: width,
         height: height,
@@ -216,16 +227,25 @@ const style = StyleSheet.create({
         alignItems: "center"
     },
 
-    submit: {
-        width: width,
-        height: 50,
-        backgroundColor: "red",
-        marginTop: 25,
-        borderBottomLeftRadius: 70,
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center"
+    submit : {
+        width :wp("90%"), 
+        height :wp("13%"), 
+        backgroundColor :"#3b594099", 
+        marginTop : 25,
+        marginBottom: 25,
+        borderRadius :30, 
+        justifyContent:"center", 
+        alignItems :"center"
     },
+    bottom : {
+        // position: "absolute",
+        // bottom : iphonex?200:Platform.OS=="ios"?100:100,
+        marginTop : 40,
+        justifyContent:"center",
+        width : width,
+        height : 50,
+        alignItems:"center"
+    }
 
 });
 const mapStateToProps = state => ({
