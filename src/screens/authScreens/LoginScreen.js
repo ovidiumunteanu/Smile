@@ -43,7 +43,7 @@ class LoginScreen extends Component {
     componentDidMount() {
         GoogleSignin.configure({
             webClientId: '856367629106-0la46bs0u0ls3bt6t1b73kt0orfp7fc6.apps.googleusercontent.com',
-            loginHint: 'developersmile01@gmail.com',
+            loginHint: '',//'developersmile01@gmail.com', 
             offlineAccess: true, 
             hostedDomain: '', 
             forceConsentPrompt: true,
