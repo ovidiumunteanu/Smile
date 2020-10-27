@@ -231,25 +231,27 @@ const MainStack = () => {
       <Drawer.Navigator
         drawerContent={(props) => {
           return (
-            // <SafeAreaView style={{ flex: 1 }}>
-            //   <View
-            //     style={{
-            //       height: 100,
-            //       alignItems: "center",
-            //       justifyContent: "center",
-            //     }}
-            //   >
-            //     <FastImage
-            //         style={styles.logo}
-            //         resizeMode={FastImage.resizeMode.stretch}
-            //         source={require("../../assets/images/Logo.png")}                  
-            //     />
-            //   </View>
-            //   <DrawerItemList {...props} />
-            // </SafeAreaView>
-            <DrawerContainer />
+            <SafeAreaView style={{ flex: 1 }}>
+              <View
+                style={{
+                  height: 100,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FastImage
+                    style={styles.logo}
+                    resizeMode={FastImage.resizeMode.stretch}
+                    source={require("../../assets/images/Logo.png")}                  
+                />
+              </View>
+              {/* <DrawerItemList {...props} /> */}
+              <DrawerContainer {...props}/>
+            </SafeAreaView>
+            
           );
         }}
+        initialRouteName = "Home"
       >
         {<Drawer.Screen name="Home" component={WrapperStack} />}
       </Drawer.Navigator>

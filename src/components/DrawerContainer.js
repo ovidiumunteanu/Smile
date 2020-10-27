@@ -11,20 +11,27 @@ export default class DrawerContainer extends React.Component {
       <View style={styles.content}>
         <View style={styles.container}>
           <MenuButton
+            title="HOME"
+            source={AppIcon.images.home}
+            onPress={() => {
+              navigation.navigate('Home');
+            }}
+          />
+        </View>
+        <View style={{...styles.container, paddingHorizontal: 70, paddingTop: 20}}>
+          <MenuButton
             title="LOG OUT"
             source={AppIcon.images.logout}
             onPress={() => {
-            //   navigation.dispatch({ type: "Logout" });
-                auth()
-                    .signOut()
-                    .then(() => {
-                        console.log(this.props);
-                        //navigation.navigate('AuthStack');
-                        
-                    })
-                    .catch(e => {
-                        console.warn(e);
-                    })
+              navigation.closeDrawer();
+              auth()
+                  .signOut()
+                  .then(() => {                        
+                      navigation.navigate('AuthStack');
+                  })
+                  .catch(e => {
+                      console.warn(e);
+                  })
             }}
           />
         </View>
@@ -36,12 +43,11 @@ export default class DrawerContainer extends React.Component {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center"
+    // flexDirection: "row",
+    alignContent: "flex-start",
+    justifyContent:"flex-start"
   },
   container: {
-    flex: 1,
     alignItems: "flex-start",
     paddingHorizontal: 20
   }
