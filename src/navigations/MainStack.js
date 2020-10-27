@@ -28,7 +28,7 @@ function BottomTabNav({ navigation }) {
             lazy={false}
             tabBarOptions={{
                 style: {
-                    backgroundColor: "transparent",
+                    backgroundColor: "white",
                     minHeight: isIphoneX()?75 : 55,
                     paddingTop : 0,
                     marginBottom: 0
@@ -131,9 +131,9 @@ function WrapperStack({ navigation }) {
         <Stack.Navigator screenOptions={{
             gestureEnabled :false,
             headerStyle: {
-                backgroundColor: "transparent",
+                backgroundColor: "white",
                 borderBottomWidth: 3,
-                height: wp("25%"),
+                height: isIphoneX()?100 : 80,
                 borderBottomColor: '#00000020'
 
             },
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     logo: {
         width :wp("40%"), 
         height: wp("15%"),
-        marginBottom: 15
+        marginBottom: isIphoneX()? 15 : 0
     }
   
   })
