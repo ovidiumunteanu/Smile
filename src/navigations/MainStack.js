@@ -1,4 +1,5 @@
 import React from 'react';
+import {Text, View, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView} from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator, DrawerContent, DrawerItemList } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -8,11 +9,11 @@ import SupplierStack from "./SupplierStack";
 import SocialStack from "./SocialStack";
 import KingdomStack from "./KingdomStack";
 import DrawerContainer from "../components/DrawerContainer";
+import {AppIcon} from "../constants/AppStyles";
 // import NotificationStack from "./NotificationStack";
 // import ChatStack from "./ChatStack";
 // import ProfileStack from "./ProfileStack";
 import { useIsFocused } from "@react-navigation/native";
-import {Text, View, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView} from "react-native";
 import FastImage from "react-native-fast-image";
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -195,7 +196,8 @@ function WrapperStack({ navigation }) {
                             <FastImage
                                 style={styles.userPhoto}
                                 resizeMode={FastImage.resizeMode.cover}
-                                source={require("../../assets/icons/ic_user.png")}
+                                // source={require("../../assets/icons/ic_user.png")}
+                                source={AppIcon.images.defaultUser}
                                 />
                         </TouchableOpacity>
                     </View>
