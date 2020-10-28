@@ -3,8 +3,10 @@ import { StyleSheet, View } from "react-native";
 import MenuButton from "../components/MenuButton";
 import { AppIcon } from "../constants/AppStyles";
 import auth from "@react-native-firebase/auth";
+import { logout } from "../actions/AuthActions";
+import { connect } from "react-redux";
 
-export default class DrawerContainer extends React.Component {
+class DrawerContainer extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
@@ -26,7 +28,10 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
               auth()
                   .signOut()
-                  .then(() => {                        
+                  .then(() => {  
+                      const { logout } = this.props;
+                      console.log(this.props.user);
+                      logout();                     
                       navigation.navigate('AuthStack');
                   })
                   .catch(e => {
@@ -52,3 +57,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   }
 });
+const mapStateToProps = state => {
+  return {
+      user : state.UserReducer
+  }
+}
+const mapDispatchToProps = dispatch => ({
+  logout : () => dispatch(logout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContainer);

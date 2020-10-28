@@ -23,7 +23,8 @@ class LoginScreen extends Component {
             remember : false,
             email : "",
             password : "",
-            loading : false
+            loading : false,
+            percent : 0
         };
     }
 
@@ -34,7 +35,8 @@ class LoginScreen extends Component {
             offlineAccess: true, 
             hostedDomain: '', 
             forceConsentPrompt: true,
-          });        
+          });    
+        console.log(this.props.user);    
     }
 
     _onPressRemember = () => {
@@ -113,18 +115,14 @@ class LoginScreen extends Component {
         const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
         // login with credential
         auth().signInWithCredential(googleCredential).then(async res => {
-            
-            const { additionalUserInfo, user } = res;
-            console.log(user.uid);
-            const { registerSuccess, loginSuccess } = this.props;
+            const { additionalUserInfo, user } = res;            
+            const {registerSuccess, loginSuccess } = this.props;
+            console.log(this.props.user);
             const userDoc = await firestore().collection("users").doc(user.uid).get();
             const userData = userDoc.data();
             if(userData === undefined ){ 
                 const data = { email : user.email, uid : user.uid }
-                registerSuccess(data);
-                const result = await firestore().collection('users').doc(user.uid).set(user);
-                //this.props.navigation.navigate("UploadPhoto");
-
+                registerSuccess(data);                
             }else{ loginSuccess(userData); }
         }).catch(e => {
             alert("Sorry, Something went wrong, please use another start method");
@@ -140,18 +138,13 @@ class LoginScreen extends Component {
         const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken, userInfo.accessToken)
         // login with credential
         auth().signInWithCredential(googleCredential).then(async res => {
-            
-            const { additionalUserInfo, user } = res;
-            console.log(user.uid);
-            const { registerSuccess, loginSuccess } = this.props;
+            const { additionalUserInfo, user } = res;            
+            const {registerSuccess, loginSuccess } = this.props;
             const userDoc = await firestore().collection("users").doc(user.uid).get();
             const userData = userDoc.data();
             if(userData === undefined ){ 
-                const data = { email : user.email, uid : user.uid }
-                registerSuccess(data);
-                const result = await firestore().collection('users').doc(user.uid).set(user);
-                //this.props.navigation.navigate("UploadPhoto");
-
+                const data = { email : user.email, uid : user.uid, fullname : user.displayName, phoneNumber: user.phoneNumber, photos: [user.photoURL, "","","","","",""]}
+                registerSuccess(data);                
             }else{ loginSuccess(userData); }
         }).catch(e => {
             alert("Sorry, Something went wrong, please use another start method");
