@@ -118,7 +118,6 @@ class RegisterScreen extends Component {
                 const { email, emailVerified, phoneNumber, uid } = res.user;
                 const data = {
                     email: email,
-                    phoneNumber: phoneNumber,
                     uid: uid,
                     fullname: this.state.fullname,
                     phoneNumber: this.state.phoneNumber,
