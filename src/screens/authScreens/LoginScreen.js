@@ -145,7 +145,9 @@ class LoginScreen extends Component {
             if(userData === undefined ){ 
                 const data = { email : user.email, uid : user.uid, fullname : user.displayName, phoneNumber: user.phoneNumber, photos: [user.photoURL, "","","","","",""]}
                 registerSuccess(data);                
-            }else{ loginSuccess(userData); }
+            }else{
+                loginSuccess(userData); 
+            }
         }).catch(e => {
             alert("Sorry, Something went wrong, please use another start method");
             console.warn(e);

@@ -8,7 +8,6 @@ export function* loginSuccess(action){
     const { payload } = action;
     yield call(savePushNotificationToken);
     yield put({type: Types.UDPATE_USER_STATE, payload : payload });
-
     yield call(RootNavigation.navigate,"MainStack");
 }
 
