@@ -24,20 +24,20 @@ export class TextInput extends Component {
             height: 50, 
             borderRadius : 10, 
             paddingHorizontal: 20, 
-            margin:wp("1%"), 
+            margin:wp("1.5%"), 
             backgroundColor:this.props.dark?"#70707022":"rgba(255,255,255,0.25)",
             fontSize : 18,
             fontFamily :"DMSans-Medium",
-            color : "white",
-            borderColor : this.state.focus?"white":"transparent",
-            borderWidth : 2
+            color : "#000000aa",
+            borderColor : this.state.focus?"#7777aa":"#7777aa22",
+            borderWidth : 1
         }
         return (
             <RNTextInput 
                 style={{...defaultStyle, ...this.props.style}}
                 placeholder={this.props.placeholder}
                 secureTextEntry={this.props.password?true:false}
-                placeholderTextColor="#7777aa"
+                placeholderTextColor="#aa557799"
                 keyboardType={this.props.email?"email-address":"default"}
                 onBlur = {this._onBlur}
                 onFocus = {this._onFocus}

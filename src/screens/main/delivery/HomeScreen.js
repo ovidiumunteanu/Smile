@@ -30,9 +30,6 @@ export default class HomeScreen extends React.Component {
           <Text>
             Hi {currentUser && currentUser.email}!
           </Text>
-          <TouchableOpacity style={styles.submit} onPress={this._logout} activeOpacity={1}>
-              <Text style={{color : "white", fontSize : 20}}>LOGOUT</Text>
-          </TouchableOpacity>
         </View>
       )
     }

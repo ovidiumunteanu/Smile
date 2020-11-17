@@ -125,8 +125,6 @@ class RegisterScreen extends Component {
                     countryCode: this.state.countryCode
                 }
                 registerSuccess(data);
-                const result = await firestore().collection('users').doc(user.uid).set(user);
-                this.props.navigation.navigate("MainStack");
             })
             .catch(e => {
                 // console.warn(e);
@@ -150,17 +148,17 @@ class RegisterScreen extends Component {
                         <View style={styles.logoContainer}>
                             <MCIcon name="account-plus-outline" size={42} color={"#EA455A"} />
                         </View>
-                        <Text style={{ fontSize: iphonex ? 50 : 36, color: "white", marginTop: 0, marginBottom: 20, fontFamily: "DMSans-Medium"}}>Register</Text>
-                        <TextInput placeholder="Full Name" onChangeText={this._onChangeFullName} />
-                        <TextInput placeholder="Email" email onChangeText={this._onChangeEmail} disableAutoCapitalize />
-                        <TextInput placeholder="Password" password onChangeText={this._onChangePassword} />
+                        <Text style={{ fontSize: iphonex ? 50 : 36, color: "white", marginTop: 0, marginBottom: 20, fontFamily: "DMSans-Medium"}}>Registrarse</Text>
+                        <TextInput placeholder="Nombre completo" onChangeText={this._onChangeFullName} />
+                        <TextInput placeholder="Correo electrónico" email onChangeText={this._onChangeEmail} disableAutoCapitalize />
+                        <TextInput placeholder="Contraseña" password onChangeText={this._onChangePassword} />
                         <View style={{ width: wp("90%"), marginTop: iphonex ? 10 : 7 }}>
                             <IntlPhoneInput
                                 onChangeText={this._onChangePhoneNumber}
                                 defaultCountry="US"
                                 containerStyle={{ backgroundColor: "rgba(255,255,255,0.25)", height: 45, justifyContent: "center", alignItems: "center" }}
                                 phoneInputStyle={{ color: 'white', fontSize: 16, marginLeft: 10, justifyContent: "center", alignItems: "center", paddingVertical : 5 }}
-                                placeholder="Phone Number"
+                                placeholder="Número de teléfono"
                                 dialCodeTextStyle={{ fontSize: 18, color: "white" }}
                                 flagStyle={{fontSize : 22}}
                             />

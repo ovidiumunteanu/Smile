@@ -16,4 +16,5 @@ export function* registerSuccess(action){
     yield put({type: Types.UDPATE_USER_STATE, payload : payload});
     let user = yield select(getStore_User); // <-- get the project
     yield call(RegisterUser, user);
+    yield call(RootNavigation.navigate,"MainStack");
 }

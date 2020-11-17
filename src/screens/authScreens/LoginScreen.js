@@ -77,7 +77,7 @@ class LoginScreen extends Component {
         .then(async res => {
             const { uid } = res.user;
             
-            const userDoc = await firestore().collection("users").doc(uid).get();
+            const userDoc = await firestore().collection("Users").doc(uid).get();
             const userData = userDoc.data();
 
             if (userData === undefined) { 
@@ -87,7 +87,6 @@ class LoginScreen extends Component {
                     uid : uid
                 }
                 registerSuccess(data); 
-                this.props.navigation.navigate("MainStack");
             }
             else { loginSuccess(userData); }
             
@@ -118,7 +117,7 @@ class LoginScreen extends Component {
             const { additionalUserInfo, user } = res;            
             const {registerSuccess, loginSuccess } = this.props;
             console.log(this.props.user);
-            const userDoc = await firestore().collection("users").doc(user.uid).get();
+            const userDoc = await firestore().collection("Users").doc(user.uid).get();
             const userData = userDoc.data();
             if(userData === undefined ){ 
                 const data = { email : user.email, uid : user.uid }
@@ -140,7 +139,7 @@ class LoginScreen extends Component {
         auth().signInWithCredential(googleCredential).then(async res => {
             const { additionalUserInfo, user } = res;            
             const {registerSuccess, loginSuccess } = this.props;
-            const userDoc = await firestore().collection("users").doc(user.uid).get();
+            const userDoc = await firestore().collection("Users").doc(user.uid).get();
             const userData = userDoc.data();
             if(userData === undefined ){ 
                 const data = { email : user.email, uid : user.uid, fullname : user.displayName, phoneNumber: user.phoneNumber, photos: [user.photoURL, "","","","","",""]}
@@ -156,35 +155,42 @@ class LoginScreen extends Component {
 
     render() {
         return (
-            <ImageBackground style={styles.container} source={require("../../../assets/images/background_login.jpg")}>
-                <SafeAreaView style={{flex : 1}}>
-                    <View style={{width:width, justifyContent: "center", alignItems: "center"}}>
-                        <View>
-                            <Image style={{width: 0.8*width, height: 0.25*height, resizeMode: "center"}} source={require("../../../assets/images/Logo.png")}/>
+            <SafeAreaView style={{flex : 1}}>
+                <View style={{width:width, justifyContent: "center", alignItems: "center"}}>
+                    <View>
+                        <Image style={{width: 0.8*width, height: 0.25*height, resizeMode: "center"}} source={require("../../../assets/images/Logo.png")}/>
+                    </View>
+                    <TextInput  placeholder="Correo electrónico" email onChangeText={this._onChangeEmail} disableAutoCapitalize/>
+                    <TextInput placeholder="Contraseña" password onChangeText={this._onChangePassword}/>
+                    <TouchableOpacity style={styles.remember} onPress={this._onPressRemember} activeOpacity={1}>
+                        <View style={{ ...styles.rememberIcon, backgroundColor: this.state.remember ? "white" : "rgba(254,254,254,.25)" }}>
+                            {this.state.remember && <MCIcon name="check" color="green" size={20} />}
                         </View>
-                        <TextInput  placeholder="Email" email onChangeText={this._onChangeEmail} disableAutoCapitalize/>
-                        <TextInput placeholder="Password" password onChangeText={this._onChangePassword}/>
-                        <TouchableOpacity style={styles.remember} onPress={this._onPressRemember} activeOpacity={1}>
-                            <View style={{...styles.rememberIcon, backgroundColor:this.state.remember?"white":"rgba(254,254,254,.25)"}}></View>
-                            <Text style={{fontSize : 16, fontFamily:"DMSans-Bold"}}>Remember this account?</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.submit} onPress={this._submit} activeOpacity={1}>
-                            <Text style={{color : this.state.password&&this.state.email?"pink":"white", fontSize : 20}}>LOGIN</Text>
-                        </TouchableOpacity>
-                        <View style={{marginBottom: 10}}>
-                            <Icon.Button
-                                name="facebook"
-                                backgroundColor="#3b5998"
-                                borderRadius = {30}
-                                onPress={this._loginWithFacebook}
-                                style={styles.social}
-                            >
-                                <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>
-                                    Login with Facebook
-                                </Text>
-                            </Icon.Button>
-                        </View>
-
+                        <Text style={{color: "#00000088", fontSize : 16, fontFamily:"DMSans-Bold"}}>¿Recuerdas esta cuenta?</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.submit} onPress={this._submit} activeOpacity={0.5}>
+                        <LinearGradient 
+                            colors={['#ee0088',  '#2964FF']} 
+                            style={styles.gradient} 
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                        >
+                            <Text style={{color : this.state.password&&this.state.email?"pink":"white", fontSize : 16}}>INICIAR SESIÓN</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                    
+                    <View style={{width: '90%', flexDirection : 'row', justifyContent: 'space-around'}}>
+                        <Icon.Button
+                            name="facebook"
+                            backgroundColor="#3b5998"
+                            borderRadius = {30}
+                            onPress={this._loginWithFacebook}
+                            style={styles.social}
+                        >
+                            <Text style={{ fontFamily: 'Arial', fontSize: 18 }}>
+                                Facebook
+                            </Text>
+                        </Icon.Button>
                         <Icon.Button
                             name="google"
                             backgroundColor="#e34958"
@@ -192,26 +198,25 @@ class LoginScreen extends Component {
                             onPress={this._loginWithGoogle}
                             style={styles.social}
                         >
-                            <Text style={{ fontFamily: 'Arial', fontSize: 20 }}>
-                                Login with Google
+                            <Text style={{ fontFamily: 'Arial', fontSize: 18 }}>
+                                Google
                             </Text>
                         </Icon.Button>
+                    </View>
+                    <TouchableOpacity style={{...styles.submit, borderWidth: 2, marginTop: 10}} onPress={this._onPressSignUp} activeOpacity={0.5}>
+                        <Text style={{color : "#ff4499", fontSize : 16}}>REGISTRAS</Text>
+                    </TouchableOpacity>
 
-                    </View>
-                    <View style={styles.bottom}>
-                        <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressForgotPassword}>
-                            <MCIcon name="key" size={20} color={"white"}/>
-                            <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10}}>Forgot Password?</Text>
-                        </TouchableOpacity>
-                        <View style={{marginVertical : 10, width : 350, height : 3, backgroundColor :"rgba(255,255,255,0.3)"}}></View>
-                        <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressSignUp}>
-                            <MCIcon name="account-plus-outline" size={22} color={"white"}/>
-                            <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10}}>Sign Up</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {this.state.loading && <Loading /> }
-                </SafeAreaView>
-            </ImageBackground>
+
+                </View>
+                <View style={styles.bottom}>
+                    <TouchableOpacity style={{flexDirection :"row"}} onPress={this._onPressForgotPassword}>
+                        <MCIcon name="key" size={20} color={"#00000088"}/>
+                        <Text style={{fontSize : 18, fontFamily:"DMSans-Bold", marginLeft : 10, color: "#00000088"}}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                </View>
+                {this.state.loading && <Loading /> }
+            </SafeAreaView>
         );
     }
 }
@@ -232,12 +237,14 @@ const styles=StyleSheet.create({
         width : 20, 
         height:20, 
         borderRadius : 15, 
+        borderColor: "#00000055",
+        borderWidth: 1,
         backgroundColor:"rgba(254,254,254,.25)", 
         marginRight : 10
     },
     social : {
-        width :wp("90%"), 
-        height :wp("13%"),       
+        width :wp("40%"), 
+        height :wp("12%"),       
         justifyContent:"center", 
         alignItems :"center"
     },
@@ -245,12 +252,22 @@ const styles=StyleSheet.create({
     submit : {
         width :wp("90%"), 
         height :wp("13%"), 
-        backgroundColor :"#3b594099", 
+        backgroundColor :"transparent", 
         marginTop : 25,
-        marginBottom: 25,
+        marginBottom: 10,
         borderRadius :30, 
+        borderColor: '#ff4499',
+        borderWidth: 0,
         justifyContent:"center", 
         alignItems :"center"
+    },
+
+    gradient: {
+        flex: 1,
+        width :wp("90%"),
+        justifyContent: 'center',
+        alignItems:'center',
+        borderRadius: 35
     },
 
     bottom : {

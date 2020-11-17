@@ -43,7 +43,7 @@ export async function savePushNotificationToken() {
 
 export async function RegisterUser(userData) {
 
-    const result = await firestore().collection('users').doc(userData.uid).set(userData);
+    const result = await firestore().collection('Users').doc(userData.uid).set(userData);
 }
 
 export async function getMatches(params) {

@@ -9,7 +9,7 @@ import SupplierStack from "./SupplierStack";
 import SocialStack from "./SocialStack";
 import KingdomStack from "./KingdomStack";
 import DrawerContainer from "../components/DrawerContainer";
-import {AppIcon} from "../constants/AppStyles";
+import { connect } from "react-redux";
 // import NotificationStack from "./NotificationStack";
 // import ChatStack from "./ChatStack";
 // import ProfileStack from "./ProfileStack";
@@ -127,106 +127,6 @@ function BottomTabNav({ navigation }) {
     )
 }
 
-function WrapperStack({ navigation }) {
-    return (
-        <Stack.Navigator screenOptions={{
-            gestureEnabled :false,
-            headerStyle: {
-                backgroundColor: "white",
-                borderBottomWidth: 3,
-                height: isIphoneX()?100 : 80,
-                borderBottomColor: '#00000020'
-
-            },
-            headerTintColor: "black",
-            headerTitleStyle: {
-                fontFamily: "DMSans-Medium",
-                fontSize: 20, 
-            },
-            headerTitleAlign : "center", 
-            // headerLeft: (props) => <HeaderBackButton tintColor="black" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.pop()} />
-            headerLeft: () => {
-                return (
-                    <View style={{flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'center'}}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.openDrawer();
-                            }}
-                        >
-                            <FastImage
-                                style={styles.userPhoto}
-                                resizeMode={FastImage.resizeMode.cover}
-                                source={require("../../assets/icons/ic_menu.png")}
-                                />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                //navigation.openDrawer();
-                            }}
-                        >
-                            <FastImage
-                                style={styles.userPhoto}
-                                resizeMode={FastImage.resizeMode.cover}
-                                source={require("../../assets/icons/ic_notification.png")}
-                                />
-                        </TouchableOpacity>
-                    </View>
-                    
-                );
-            },
-            headerRight: () => {
-                return (
-                    <View style={{flex: 1, flexDirection: 'row', alignContent: 'space-between', alignItems: 'center'}}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                // navigation.openDrawer();
-                            }}
-                        >
-                            <FastImage
-                                style={styles.shopping}
-                                resizeMode={FastImage.resizeMode.stretch}
-                                source={require("../../assets/icons/ic_shopping.png")}
-                                />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                //navigation.openDrawer();
-                            }}
-                        >
-                            <FastImage
-                                style={styles.userPhoto}
-                                resizeMode={FastImage.resizeMode.cover}
-                                // source={require("../../assets/icons/ic_user.png")}
-                                source={AppIcon.images.defaultUser}
-                                />
-                        </TouchableOpacity>
-                    </View>
-                );
-            },
-            headerTitle : () => (
-                <TouchableOpacity 
-                    style={{paddingLeft: 20}}
-                    onPress={() => {
-                        navigation.navigate('HomeScreen');
-                    }}
-                >
-                    <FastImage
-                        style={styles.logo}
-                        resizeMode={FastImage.resizeMode.stretch}
-                        source={require("../../assets/images/Logo.png")}
-                        />
-                </TouchableOpacity>
-                
-            )
-        }}>
-            <Stack.Screen name="TabStack" component={BottomTabNav} options={{
-                headerShown: true
-                // headerLeft: (props) => <HeaderBackButton tintColor="white" labelVisible={false} style={{ marginLeft: 10 }} onPress={() => navigation.navigate("Start")} />
-            }}/>
-        </Stack.Navigator> 
-    )
-}
-
 const MainStack = () => {
 //     const { user, setUser } = useContext(AppContext);
     return (
@@ -255,22 +155,10 @@ const MainStack = () => {
         }}
         initialRouteName = "Home"
       >
-        {<Drawer.Screen name="Home" component={WrapperStack} />}
+        {<Drawer.Screen name="Home" component={BottomTabNav} />}
       </Drawer.Navigator>
     );
 };
-
-// const DrawerStack = DrawerNavigator(
-// {
-//     Tab: TabNavigator
-// },
-// {
-//     drawerPosition: "left",
-//     initialRouteName: "Tab",
-//     drawerWidth: 200,
-//     contentComponent: DrawerContainer
-// }
-// );
 
 const styles = StyleSheet.create({
 
@@ -315,7 +203,16 @@ const styles = StyleSheet.create({
     }
   
   })
+const mapStateToProps = state => {
+    return {
+        user : state.UserReducer
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    registerSuccess : data => dispatch(registerSuccess(data)),
+    loginSuccess : data => dispatch(loginSuccess(data))
+})
 
-export default MainStack;
+export default connect(mapStateToProps, mapDispatchToProps)(MainStack);
 
 
